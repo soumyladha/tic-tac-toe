@@ -3,7 +3,15 @@ import GetCurrentChar from './GetCurrentChar'
 import OnClick from './OnClick'
 import React, { Component } from 'react';
 import utils from '../utils'
+import axios from 'axios'
 
+
+const APITest = () => {
+    const url = 'https://jsonplaceholder.typicode.com/todos/1';
+    const response = []
+    axios.get(url).then(data => response.push(data.data)).catch(err => console.log(err))
+    return response
+}
 
 
 const numberOfBoxes = utils.range(1, 9)
@@ -16,14 +24,12 @@ class Game extends Component {
         count: 0
     }
 
+
     OnClickhandler = (number, currentStatus) => {
         if (currentStatus === 'used' || currentStatus === 'stop' || currentStatus === 'winner') {
             return;
         } else {
             this.UpdateState(number, this.state.availableBox)
-            // console.log("blah")
-            // let agentNum = this.state.availableBox[utils.random(0, this.state.availableBox.length - 1)]
-            // this.UpdateState(agentNum, this.state.availableBox)
         }
     }
 
@@ -50,7 +56,6 @@ class Game extends Component {
         const newAvailableBox2 = newAvailableBox.filter(function (e) {
             return e !== agentNum
         })
-        console.log(agentNum)
 
         const newChar = this.state.storeChar
         newChar[number - 1] = 'X'
@@ -78,6 +83,8 @@ class Game extends Component {
         }
 
     }
+
+
     render() {
         return (
             <div className="game">
@@ -85,6 +92,7 @@ class Game extends Component {
                     <div className="right">
                         <div>You play X</div>
                         {numberOfBoxes.map(number => <OnClick key={number} number={number} status={this.NumberStatus(number)} handler={this.OnClickhandler} currentChar={this.state.storeChar[number - 1]} />)}
+                        <div>{console.log(APITest())};</div>
                     </div>
                 </div>
             </div>
