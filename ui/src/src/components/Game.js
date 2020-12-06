@@ -26,24 +26,33 @@ const Game = () => {
         return 'used'
     };
     const OnClickhandler = (number, currentStatus) => {
-        if (currentStatus == 'used' || currentStatus == 'stop' || currentStatus == 'winner') {
+        if (currentStatus === 'used' || currentStatus === 'stop' || currentStatus === 'winner') {
             return;
         } else {
-            const newAvailableBox = availableBox.filter(function (e) {
-                return e !== number
-            })
-            setAvailableBox(newAvailableBox);
-            setCount(count + 1)
-            storeChar[number - 1] = GetCurrentChar(count)
-            setStoreChar(storeChar)
-            if (GetWinner(storeChar).length > 0) {
-                setWinner(GetWinner(storeChar))
-                setStop(availableBox)
-                setAvailableBox([])
-            }
+            UpdateState(number, availableBox)
+            // console.log(availableBox, count, storeChar)
+            // let agentNum = availableBox[utils.random(0, availableBox.length - 1)]
+            // UpdateState(agentNum, availableBox)
+
 
         }
     }
+    const UpdateState = (number, availableBox) => {
+        const newAvailableBox = availableBox.filter(function (e) {
+            return e !== number
+        })
+        setAvailableBox(newAvailableBox);
+        setCount(count + 1)
+        storeChar[number - 1] = GetCurrentChar(count)
+        setStoreChar(storeChar)
+        if (GetWinner(storeChar).length > 0) {
+            setWinner(GetWinner(storeChar))
+            setStop(availableBox)
+            setAvailableBox([])
+        }
+
+    }
+    // const GetR
 
 
 

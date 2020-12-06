@@ -1,5 +1,5 @@
 const GetCurrentChar = (count) => {
-    if (count % 2 == 0) {
+    if (count % 2 === 0) {
         return 'X';
     }
     return 'O';
