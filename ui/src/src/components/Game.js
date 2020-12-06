@@ -1,73 +1,98 @@
 import GetWinner from './GetWinner'
 import GetCurrentChar from './GetCurrentChar'
 import OnClick from './OnClick'
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import utils from '../utils'
 
+
+
 const numberOfBoxes = utils.range(1, 9)
+class Game extends Component {
+    state = {
+        availableBox: utils.range(1, 9),
+        stop: [],
+        winner: [],
+        storeChar: utils.range(1, 9).map(number => ''),
+        count: 0
+    }
 
-const Game = () => {
-    const [availableBox, setAvailableBox] = useState(utils.range(1, 9));
-    const [stop, setStop] = useState([])
-    const [winner, setWinner] = useState([]);
-    const [storeChar, setStoreChar] = useState(utils.range(1, 9).map(number => ''));
-    let [count, setCount] = useState(0);
-    const numberStatus = (number) => {
+    OnClickhandler = (number, currentStatus) => {
+        if (currentStatus === 'used' || currentStatus === 'stop' || currentStatus === 'winner') {
+            return;
+        } else {
+            this.UpdateState(number, this.state.availableBox)
+            // console.log("blah")
+            // let agentNum = this.state.availableBox[utils.random(0, this.state.availableBox.length - 1)]
+            // this.UpdateState(agentNum, this.state.availableBox)
+        }
+    }
 
-        if (winner.includes(number)) {
+    NumberStatus = (number) => {
+
+        if (this.state.winner.includes(number)) {
             return 'winner'
         }
-        if (availableBox.includes(number)) {
+        if (this.state.availableBox.includes(number)) {
             return 'available';
         }
-        if (stop.includes(number)) {
+        if (this.state.stop.includes(number)) {
             return 'stop'
         }
         return 'used'
     };
-    const OnClickhandler = (number, currentStatus) => {
-        if (currentStatus === 'used' || currentStatus === 'stop' || currentStatus === 'winner') {
-            return;
-        } else {
-            UpdateState(number, availableBox)
-            // console.log(availableBox, count, storeChar)
-            // let agentNum = availableBox[utils.random(0, availableBox.length - 1)]
-            // UpdateState(agentNum, availableBox)
 
-
-        }
-    }
-    const UpdateState = (number, availableBox) => {
+    UpdateState = (number, availableBox) => {
         const newAvailableBox = availableBox.filter(function (e) {
             return e !== number
         })
-        setAvailableBox(newAvailableBox);
-        setCount(count + 1)
-        storeChar[number - 1] = GetCurrentChar(count)
-        setStoreChar(storeChar)
-        if (GetWinner(storeChar).length > 0) {
-            setWinner(GetWinner(storeChar))
-            setStop(availableBox)
-            setAvailableBox([])
+
+        let agentNum = newAvailableBox[utils.random(0, newAvailableBox.length - 1)]
+        const newAvailableBox2 = newAvailableBox.filter(function (e) {
+            return e !== agentNum
+        })
+        console.log(agentNum)
+
+        const newChar = this.state.storeChar
+        newChar[number - 1] = 'X'
+        newChar[agentNum - 1] = 'O'
+        const tempWinner = GetWinner(this.state.storeChar)
+
+        if (tempWinner.length > 0) {
+            this.setState(prevState => ({
+                availableBox: [],
+                count: 0,
+                storeChar: newChar,
+                stop: newAvailableBox2,
+                winner: tempWinner
+            }), () => { console.log('new state', this.state); })
+        }
+        else {
+            this.setState(prevState => ({
+                availableBox: newAvailableBox2,
+                count: prevState.count + 1,
+                storeChar: newChar,
+                stop: [],
+                winner: []
+            }), () => { console.log('new state', this.state); })
+
         }
 
     }
-    // const GetR
-
-
-
-
-
-    return (
-        <div className="game">
-            <div className="body">
-                <div className="right">
-                    <div>You play X</div>
-                    {numberOfBoxes.map(number => <OnClick key={number} number={number} status={numberStatus(number)} handler={OnClickhandler} currentChar={storeChar[number - 1]} />)}
+    render() {
+        return (
+            <div className="game">
+                <div className="body">
+                    <div className="right">
+                        <div>You play X</div>
+                        {numberOfBoxes.map(number => <OnClick key={number} number={number} status={this.NumberStatus(number)} handler={this.OnClickhandler} currentChar={this.state.storeChar[number - 1]} />)}
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
 
+
+
+
+}
 export default Game

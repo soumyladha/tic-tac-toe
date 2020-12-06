@@ -7,7 +7,6 @@ const GetWinner = (storeChar) => {
             winnerL.push(j + 1);
         }
         if (s === 'XXX' || s === 'OOO') {
-            console.log(winnerL)
             return winnerL
         }
         s = ""
@@ -17,7 +16,6 @@ const GetWinner = (storeChar) => {
             winnerH.push(j + 1);
         }
         if (s === 'XXX' || s === 'OOO') {
-            console.log(winnerH)
             return winnerH
         }
     }
@@ -28,7 +26,6 @@ const GetWinner = (storeChar) => {
         winnerD1.push(i + 1)
     }
     if (s === 'XXX' || s === 'OOO') {
-        console.log(winnerD1)
         return winnerD1
     }
     s = ""
@@ -38,7 +35,6 @@ const GetWinner = (storeChar) => {
         winnerD2.push(i + 1)
     }
     if (s === 'XXX' || s === 'OOO') {
-        console.log(winnerD2)
         return winnerD2
     }
     return []
